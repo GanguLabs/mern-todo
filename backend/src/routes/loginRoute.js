@@ -15,7 +15,7 @@ loginRouter.post('/', (req, res) => {
             token,
         });
     }else{
-        res.status(401).send('Unauthorized');
+        res.status(401).send('Login Failed');
     }
 });
 
