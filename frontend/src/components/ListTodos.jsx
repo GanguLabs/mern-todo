@@ -1,26 +1,27 @@
-import { useState, useEffect } from "react"
+import { useQuery } from "@tanstack/react-query"
+import Cliploader from 'react-spinners/ClipLoader'
+
 import { getAllTodos } from "../api/todosApi"
+import TodoItem from "./TodoItem"
 
 const ListTodos = () => {
-    const [todos, setTodos] = useState([]);
+    const { data: todos, isLoading, isError, isSuccess } = useQuery({
+        queryKey: ['list-todos'],
+        queryFn: getAllTodos
+    })
 
-    useEffect(() => {
-        getAllTodos().then(data => {
-            console.log(data)
-            setTodos(data)
-        })
-    }, [])
     return (
         <div>
             <h1>List Todos</h1>
-            <ul>
-                {todos.map(todo => (
-                    <li key={todo._id}>
-                        {todo.completed ? '✅' : '❌'}
-                        {todo.title}
-                    </li>
-                ))}
-            </ul>
+            {isLoading ? <Cliploader size={50} /> : null}
+            {isError && <p>Error</p>}
+            {isSuccess && todos &&
+                <>
+                    {todos?.map(todo => (
+                        <TodoItem key={todo._id} todo={todo} />
+                    ))}
+                </>
+            }
         </div>
     )
 }
