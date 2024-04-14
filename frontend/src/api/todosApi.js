@@ -1,10 +1,11 @@
 const todosApiURL = 'http://localhost:3000/todos';
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcxMzA5NjgzNSwiZXhwIjoxNzEzMTAwNDM1fQ.HoK3DUPM5VrEbahiX7aT47LDzi8n305Affw7Ek9sD-o";
 
 export const getAllTodos = async () => {
   const response = await fetch(todosApiURL, {
     method: 'GET',
     headers: {
-      'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcxMzA5MzA4NSwiZXhwIjoxNzEzMDk2Njg1fQ.HOJK-qTYRmNQZTVkbS9CVnjsqZzzctHK_fOCMLHYV1I`,
+      'Authorization': `Bearer ${token}`,
       "Content-Type": "application/json"
     }
   
@@ -21,4 +22,26 @@ export const createTodo = async (todo) => {
     body: JSON.stringify(todo),
   });
   return response.json();
+}
+
+export const updateTodo = async (todo) => {
+  const response = await fetch(`${todosApiURL}/${todo._id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify(todo),
+    })
+    return response.json();
+}
+
+export const deleteTodo = async (id) => {
+  const response = await fetch(`${todosApiURL}/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+    });
+    // return response.json();
 }
