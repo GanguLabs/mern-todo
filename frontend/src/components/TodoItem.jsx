@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useQueryClient, useMutation } from '@tanstack/react-query';
+import { debounce } from 'lodash';
 
 import { deleteTodo, updateTodo } from '../api/todosApi';
 
 const TodoItem = ({ todo }) => {
+    const [title, setTitle] = useState(todo.title);
+
     const queryClient = useQueryClient();
 
     // const { mutate: toggleTodo } = useMutation(
@@ -14,6 +17,16 @@ const TodoItem = ({ todo }) => {
     //         }
     //     }
     // );
+
+    useEffect(() => {
+        if(title !== todo.title) {
+            debouncedUpdateTitle({
+                ...todo,
+                title
+            });
+        }
+    }, [title]);
+
     const todoMutation = useMutation({
         mutationKey: 'update-todo',
         mutationFn: updateTodo,
@@ -30,9 +43,14 @@ const TodoItem = ({ todo }) => {
         }
     });
 
-    const toggleTodo = (updatedTodo) => {
+    const updateTodoMutation = (updatedTodo) => {
         todoMutation.mutate(updatedTodo);
     };
+
+    const debouncedUpdateTitle = useCallback(
+        debounce(updateTodoMutation, 600),
+        [updateTodoMutation]
+    ); 
     // const toggleTodo = async () => {
     //     updateTodo({
     //         ...todo,
@@ -47,16 +65,13 @@ const TodoItem = ({ todo }) => {
 
     return (
         <div>
-            <input type="checkbox" checked={todo.completed} onChange={() => toggleTodo({
+            <input type="checkbox" checked={todo.completed} onChange={() => updateTodoMutation({
                 ...todo,
                 completed: !todo.completed
             })} />
             {/* {todo.completed ? '✅' : '❌'} */}
             {/* {todo.title} */}
-            <input type="text" value={todo.title} onChange={(e)=> toggleTodo({
-                ...todo,
-                title: e.target.value
-            })} />
+            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
 
             <button onClick={deleteClickHandler}>
                 Delete
