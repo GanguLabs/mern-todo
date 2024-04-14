@@ -6,7 +6,7 @@ const isLoggedin = (req, res, next) => {
         res.status(401).send('Unauthorized');
     } else {
         const token = authHeader.split(' ')[1];
-        const decoded = jwt.verify(token, process.env.SECRET, (err, decoded) => {
+        jwt.verify(token, process.env.SECRET, (err, decoded) => {
             if (err) {
                 res.status(403).send('Invalid Credentials');
             } else {
