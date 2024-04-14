@@ -12,7 +12,7 @@ const ListTodos = () => {
 
     return (
         <div>
-            <h1>List Todos</h1>
+            <h3>List Todos</h3>
             {isLoading ? <Cliploader size={50} /> : null}
             {isError && <p>Error</p>}
             {isSuccess && todos &&

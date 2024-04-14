@@ -9,7 +9,7 @@ loginRouter.post('/', (req, res) => {
         const token = jwt.sign({
             userId: 1,
         }, process.env.SECRET, {
-            expiresIn: '1h',
+            expiresIn: '1d',
         });
         res.json({
             token,
