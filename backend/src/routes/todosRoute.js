@@ -31,4 +31,35 @@ todosRouter.post('/', async (req, res) => {
     // });
 })
 
+todosRouter.put('/:id', async (req, res) => {
+    const todo = await TodoModel.findById(req.params.id);
+
+    if(!todo){
+        return res.status(404).send('Todo not found');
+    }
+    todo.title = req.body.title;
+    todo.completed = req.body.completed;
+
+    await todo.save();
+    res.json(todo);
+    // const updatedTodo = await TodoModel.findByIdAndUpdate(req.params.id, todo);
+    // res.json(updatedTodo);
+
+});
+
+todosRouter.delete('/:id', async (req, res) => {
+    const todo = await TodoModel.findById(req.params.id);
+
+    if(!todo){
+        return res.status(404).send('Todo not found');
+    }
+
+    await todo.deleteOne();
+    res.status(204).json({
+        status: 'success',
+        message: 'Todo deleted successfully',
+    });
+
+});
+
 module.exports = todosRouter;
