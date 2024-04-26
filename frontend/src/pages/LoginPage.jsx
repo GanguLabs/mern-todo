@@ -1,13 +1,15 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 
 import { loginUser } from "../api/usersApi"
 import { useNavigate } from 'react-router-dom';
+import { TokenContext } from '../App';
 
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    // const [token, setToken] = useContext(TokenContext)
     const navigate = useNavigate();
 
     const handleLogin = (e) => {
@@ -16,6 +18,7 @@ const LoginPage = () => {
         loginUser(password)
         .then(()=>{
             // console.log('User logged in');
+            // setToken(token);
             navigate('/');
         }).catch((err)=>{
             setError(err.message)

@@ -14,6 +14,7 @@ const CreateTodoForm = () => {
     });
 
     const createTodoHandler = (e) => {
+        console.log('createTodoHandler')
         e.preventDefault();
         const form = e.target;
         const formData = new FormData(form);
